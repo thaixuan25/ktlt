@@ -2,7 +2,7 @@
 #define MENU_H
 
 #include "../services/quanlylop.h"
-#include <string> // Cần cho std::string trong readInt
+#include <string>
 // #include <iostream> // Sẽ chuyển sang .cpp
 // using namespace std; // Sẽ bỏ
 

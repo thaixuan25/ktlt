@@ -1,6 +1,5 @@
 #include "ui/menu.h"
 #include <iostream>
-#include <exception>
 using namespace std;
 
 int main(){

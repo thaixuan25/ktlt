@@ -14,18 +14,14 @@ int Menu::readInt(const string& prompt) {
     while(!(cin >> value) || cin.peek() != '\n') { // Thêm kiểm tra ký tự thừa
         cout << "Vui lòng nhập một số nguyên hợp lệ: ";
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.ignore();
     }
-    // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Đã xử lý trong vòng lặp hoặc sau khi đọc thành công
     return value;
 }
 
 void Menu::pauseScreen() {
     cout << "\nNhấn Enter để tiếp tục...";
-    // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Cần thiết nếu trước đó là cin >>
-    // Nếu trước đó là getline hoặc cin.ignore đã dọn dẹp rồi thì không cần nữa
-    // Tuy nhiên, để an toàn, có thể thêm một lần ignore sạch bộ đệm trước khi get
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Đảm bảo bộ đệm sạch
+    cin.ignore(); // Đảm bảo bộ đệm sạch
     cin.get();
 }
 
@@ -131,9 +127,6 @@ void Menu::handleThemSinhkhoa() {
         if(ql.themSinhkhoa(maLop, Sinhkhoa(maSV, hoTen, khoa))) {
             cout << "Đã thêm sinh viên: " << hoTen << " (MSV: " << maSV << ") vào lớp " << maLop << endl;
             addedCount++;
-        } else {
-            // Thông báo lỗi đã có trong ql.themSinhkhoa (ví dụ: SV đã tồn tại)
-            // Có thể không cần thông báo thêm ở đây nếu ql đã đủ rõ ràng
         }
     }
     

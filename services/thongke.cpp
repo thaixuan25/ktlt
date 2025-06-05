@@ -1,6 +1,5 @@
 #include "thongke.h"
 #include <iostream>
-#include <iomanip>
 #include <vector>
 #include "../modules/defaults.h" // Cần cho Lop, Sinhkhoa, DiemDanh
 #include <unordered_map> // Cần cho std::unordered_map
@@ -13,8 +12,8 @@ ThongKe::ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {
     tk.tongBuoiDiemDanh = lop.danhSachDiemDanh.size();
     
     // Khởi tạo soLanVang cho tất cả sinh viên
-    for(const auto& sv_pair : lop.danhSachSV) {
-        tk.soLanVang[sv_pair.first] = 0;
+    for(const auto& svPair : lop.danhSachSV) {
+        tk.soLanVang[svPair.first] = 0;
     }
 
     if(tk.tongBuoiDiemDanh == 0 || tk.tongSinhkhoa == 0) {
@@ -25,29 +24,29 @@ ThongKe::ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {
     long long tongSoLuotCoMat = 0; // Sử dụng long long để tránh tràn nếu số lượng lớn
     
     // Khởi tạo dữ liệu cho tất cả sinh viên
-    for(const auto& sv_pair : lop.danhSachSV) {
-        tk.tongketSinhvien[sv_pair.first].hoTen = sv_pair.second.hoTen;
-        tk.tongketSinhvien[sv_pair.first].tongSoLuotCoMat = 0;
+    for(const auto& svPair : lop.danhSachSV) {
+        tk.tongketSinhvien[svPair.first].hoTen = svPair.second.hoTen;
+        tk.tongketSinhvien[svPair.first].tongSoLuotCoMat = 0;
     }
     
     // Duyệt qua tất cả các ngày điểm danh
     for(const auto& diemDanhNgay : lop.danhSachDiemDanh) {
-        for(const auto& sv_pair : lop.danhSachSV) {
-            // Tìm trạng thái điểm danh của sinh viên sv_pair.first trong ngày diemDanhNgay
-            auto it_trangthai = diemDanhNgay.trangThai.find(sv_pair.first);
-            if(it_trangthai != diemDanhNgay.trangThai.end()) {
-                if(it_trangthai->second == 1) { // Có mặt
+        for(const auto& svPair : lop.danhSachSV) {
+            // Tìm trạng thái điểm danh của sinh viên svPair.first trong ngày diemDanhNgay
+            auto itTrangThai = diemDanhNgay.trangThai.find(svPair.first);
+            if(itTrangThai != diemDanhNgay.trangThai.end()) {
+                if(itTrangThai->second == 1) { // Có mặt
                     tongSoLuotCoMat++;
-                    tk.tongketSinhvien[sv_pair.first].trangThai.push_back(make_pair(diemDanhNgay.ngay, 1));
-                    tk.tongketSinhvien[sv_pair.first].tongSoLuotCoMat++;
+                    tk.tongketSinhvien[svPair.first].trangThai.push_back(make_pair(diemDanhNgay.ngay, 1));
+                    tk.tongketSinhvien[svPair.first].tongSoLuotCoMat++;
                 } else { // Vắng
-                    tk.soLanVang[sv_pair.first]++;
-                    tk.tongketSinhvien[sv_pair.first].trangThai.push_back(make_pair(diemDanhNgay.ngay, 0));
+                    tk.soLanVang[svPair.first]++;
+                    tk.tongketSinhvien[svPair.first].trangThai.push_back(make_pair(diemDanhNgay.ngay, 0));
                 }
             } else {
                 // Mặc định là vắng nếu không tìm thấy bản ghi điểm danh cho sinh viên này vào ngày này
-                tk.soLanVang[sv_pair.first]++;
-                tk.tongketSinhvien[sv_pair.first].trangThai.push_back(make_pair(diemDanhNgay.ngay, 0));
+                tk.soLanVang[svPair.first]++;
+                tk.tongketSinhvien[svPair.first].trangThai.push_back(make_pair(diemDanhNgay.ngay, 0));
             }
         }
     }

@@ -45,14 +45,14 @@ bool DateValidator::isValidDate(const string& date) {
 
 string DateValidator::getCurrentDate() {
     auto now = chrono::system_clock::now();
-    time_t time_now_t = chrono::system_clock::to_time_t(now);
+    time_t timeNowT = chrono::system_clock::to_time_t(now);
     // Sử dụng localtime_s trên Windows hoặc localtime_r trên POSIX để an toàn hơn
     // Tuy nhiên, để đơn giản và giữ nguyên code gốc, tạm dùng localtime
-    tm tm_snapshot = *localtime(&time_now_t);
+    tm tmSnapshot = *localtime(&timeNowT);
     
     stringstream ss;
-    ss << setfill('0') << setw(2) << tm_snapshot.tm_mday << "/"
-       << setfill('0') << setw(2) << (tm_snapshot.tm_mon + 1) << "/"
-       << (tm_snapshot.tm_year + 1900);
+    ss << setfill('0') << setw(2) << tmSnapshot.tm_mday << "/"
+       << setfill('0') << setw(2) << (tmSnapshot.tm_mon + 1) << "/"
+       << (tmSnapshot.tm_year + 1900);
     return ss.str();
 } 
