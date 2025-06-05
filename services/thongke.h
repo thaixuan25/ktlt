@@ -9,11 +9,18 @@
 class ThongKe {
 public:
     // Cấu trúc thống kê lớp
+    struct TongketSinhvien{
+        string hoTen;
+        vector<pair<string, int>> trangThai;
+        int tongSoLuotCoMat = 0;
+    };
+
     struct ThongKeLop {
         int tongSinhkhoa;
         int tongBuoiDiemDanh;
         double tiLeDiemDanhTrungBinh;
         std::unordered_map<int, int> soLanVang;
+        std::unordered_map<int, TongketSinhvien> tongketSinhvien;
     };
     
     // Tính toán thống kê
