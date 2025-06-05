@@ -46,8 +46,6 @@ bool DateValidator::isValidDate(const string& date) {
 string DateValidator::getCurrentDate() {
     auto now = chrono::system_clock::now();
     time_t timeNowT = chrono::system_clock::to_time_t(now);
-    // Sử dụng localtime_s trên Windows hoặc localtime_r trên POSIX để an toàn hơn
-    // Tuy nhiên, để đơn giản và giữ nguyên code gốc, tạm dùng localtime
     tm tmSnapshot = *localtime(&timeNowT);
     
     stringstream ss;

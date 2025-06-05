@@ -12,8 +12,8 @@
                 "ui/menu.cpp",
                 "services/quanlylop.cpp",
                 "services/thongke.cpp",
-                "middlewares/datevalidator.cpp",
-                "controllers/filemanager.cpp",
+                "utils/datevalidator.cpp",
+                "utils/filemanager.cpp",
                 "-o",
                 "main.exe"
             ],

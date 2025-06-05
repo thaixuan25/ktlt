@@ -1,6 +1,6 @@
 #include "menu.h"
-#include "../middlewares/datevalidator.h" // Cần cho DateValidator::getCurrentDate()
-#include "../modules/defaults.h"      // Cần cho Sinhkhoa
+#include "../utils/datevalidator.h" // Cần cho DateValidator::getCurrentDate()
+#include "../modules/structure.h"      // Cần cho Sinhkhoa
 #include <iostream>                     // Cần cho cout, cin, endl
 #include <string>                       // Cần cho string, getline
 #include <limits>                       // Cần cho numeric_limits
@@ -39,9 +39,10 @@ void Menu::menu(){
         cout << "3. Điểm danh" << endl;
         cout << "4. Sửa điểm danh" << endl;
         cout << "5. Xuất bảng điểm danh theo ngày" << endl;
-        cout << "6. Xem lịch sử các ngày đã điểm danh của lớp" << endl;
-        cout << "7. Xem thống kê điểm danh của lớp" << endl;
-        cout << "8. Đọc dữ liệu lớp từ file" << endl;
+        cout << "6. Xuất bảng điểm danh của sinh viên" << endl;
+        cout << "7. Xem lịch sử điểm danh của lớp" << endl;
+        cout << "8. Xem thống kê điểm danh của lớp" << endl;
+        cout << "9. Đọc dữ liệu lớp từ file" << endl;
         cout << "0. Thoát chương trình" << endl;
         cout << string(40, '=') << endl;
         
@@ -54,9 +55,10 @@ void Menu::menu(){
             case 3: handleDiemDanh(); break;
             case 4: handleSuaDiemDanh(); break;
             case 5: handleXuatDiemDanh(); break;
-            case 6: handleTimLichSu(); break;
-            case 7: handleXemThongKe(); break;
-            case 8: handleDocFile(); break;
+            case 6: handleXuatDiemDanhSV(); break;
+            case 7: handleTimLichSu(); break;
+            case 8: handleXemThongKe(); break;
+            case 9: handleDocFile(); break;
             case 0: 
                 cout << "Cảm ơn bạn đã sử dụng hệ thống! Tạm biệt!" << endl;
                 running = false;
@@ -84,7 +86,6 @@ void Menu::handleThemLop() {
     }
 
     if(ql.themLop(maLop, tenLop)) {
-        cout << "Đã thêm lớp " << tenLop << " với mã " << maLop << " thành công." << endl;
         ql.saveDiemDanh();
     }
 }
@@ -125,7 +126,6 @@ void Menu::handleThemSinhkhoa() {
         }
         
         if(ql.themSinhkhoa(maLop, Sinhkhoa(maSV, hoTen, khoa))) {
-            cout << "Đã thêm sinh viên: " << hoTen << " (MSV: " << maSV << ") vào lớp " << maLop << endl;
             addedCount++;
         }
     }
@@ -142,7 +142,6 @@ void Menu::handleDiemDanh() {
     
     string ngayNhap;
     cin.ignore();
-    // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Có thể cần nếu readInt trước đó không dọn sạch hoàn toàn
     getline(cin, ngayNhap);
 
     if(ngayNhap.empty()) {
@@ -158,8 +157,7 @@ void Menu::handleDiemDanh() {
     int maLop = readInt("Nhập mã lớp cần điểm danh: ");
     
     if(ql.diemDanh(ngayNhap, maLop)) {
-        // Thông báo đã có trong ql.diemDanh
-        ql.saveDiemDanh(); // Không tự động lưu
+        ql.saveDiemDanh();
     }
 }
 
@@ -203,6 +201,13 @@ void Menu::handleXuatDiemDanh() {
         
     int maLop = readInt("Nhập mã lớp: ");
     ql.xuatDiemDanh(ngay, maLop);
+}
+
+void Menu::handleXuatDiemDanhSV() {
+    cout << "\n --- XUẤT BẢNG ĐIỂM DANH CỦA SINH VIÊN ---" << endl;
+    int maSV = readInt("Nhập mã sinh viên: ");
+    int maLop = readInt("Nhập mã lớp: ");
+    ql.xuatDiemDanhSV(maLop, maSV);
 }
 
 void Menu::handleTimLichSu() {

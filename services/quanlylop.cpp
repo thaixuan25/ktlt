@@ -25,11 +25,11 @@ bool QuanLyLop::diemDanhMoi(const string& ngay, Lop& lop) {
             if(cin.fail() || (trangThai != 0 && trangThai != 1)) {
                 cout << "Vui lòng nhập 0 hoặc 1!" << endl;
                 cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 trangThai = -1; // Đặt giá trị không hợp lệ để lặp lại
             }
         } while(trangThai != 0 && trangThai != 1);
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa bộ đệm sau khi đọc số
+        cin.ignore(); // Xóa bộ đệm sau khi đọc số
         
         diemDanhMoiObj.trangThai[sv.maSV] = trangThai;
         count++;
@@ -56,11 +56,11 @@ bool QuanLyLop::diemDanhLai(DiemDanh& diemDanh, const Lop& lop) {
             if(cin.fail() || (trangThai != 0 && trangThai != 1)) {
                 cout << "Vui lòng nhập 0 hoặc 1!" << endl;
                 cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 trangThai = -1; // Đặt giá trị không hợp lệ để lặp lại
             }
         } while(trangThai != 0 && trangThai != 1);
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa bộ đệm
+        cin.ignore(); // Xóa bộ đệm
         
         diemDanh.trangThai[sv.maSV] = trangThai;
         count++;
@@ -241,6 +241,33 @@ void QuanLyLop::xuatDiemDanh(const string& ngay, int maLop) {
     cout << "Không tìm thấy bản ghi điểm danh cho lớp " << maLop << " vào ngày " << ngay << "." << endl;
 }
 
+// Xuất bảng điểm danh của sinh viên
+void QuanLyLop::xuatDiemDanhSV(int maLop, int maSV) {
+    auto lopIt = danhSachLop.find(maLop);
+    if(lopIt == danhSachLop.end()) {
+        cout << "Lớp " << maLop << " không tồn tại trong bộ nhớ!" << endl;
+        return;
+    }
+
+    if(!lopIt->second.danhSachSV.count(maSV)) {
+        cout << "Sinh viên " << maSV << " không tồn tại trong lớp " << maLop << "!" << endl;
+        return;
+    }
+    cout << "\nBẢNG ĐIỂM DANH CỦA SINH VIÊN " << lopIt->second.danhSachSV[maSV].hoTen << " (MSV: " << maSV << ")" << endl;
+    cout << string(60, '=') << endl;
+    int soVang = 0, soCoMat = 0;
+    for(const auto& ddNgay : lopIt->second.danhSachDiemDanh) {
+        if(ddNgay.trangThai.count(maSV)) {
+            cout << "Ngày: " << ddNgay.ngay << " - Trạng thái: " << (ddNgay.trangThai.at(maSV) == 1 ? "Có mặt" : "Vắng") << endl;
+            if(ddNgay.trangThai.at(maSV) != 1) soVang++;
+            else soCoMat++;
+        }
+    }
+    cout << "Tổng số buổi vắng: " << soVang << endl;
+    cout << "Tổng số buổi có mặt: " << soCoMat << endl;
+    cout << "Tỷ lệ điểm danh: " << fixed << setprecision(2) << (static_cast<double>(soCoMat) / lopIt->second.danhSachDiemDanh.size()) * 100.0 << "%" << endl;
+}
+
 // Xuất lịch sử điểm danh
 void QuanLyLop::xemLichSu(int maLop) {
     auto lopIt = danhSachLop.find(maLop);
@@ -332,15 +359,15 @@ void QuanLyLop::xemThongKe(int maLop) {
     }
 }
 
-bool QuanLyLop::saveDiemDanh() {
+void QuanLyLop::saveDiemDanh() {
     if(!FileManager::createDirectory()) {
         cout << "Lỗi: Không thể tạo hoặc truy cập thư mục lưu trữ '" << FileManager::getFilePath(0).substr(0, FileManager::getFilePath(0).find_last_of("/\\")) << "'!" << endl; // Cố gắng lấy tên thư mục
-        return false;
+        return;
     }
     
     if (danhSachLop.empty()) {
         cout << "Không có dữ liệu lớp nào trong bộ nhớ để lưu." << endl;
-        return true;
+        return;
     }
 
     int countSaved = 0;
@@ -377,14 +404,7 @@ bool QuanLyLop::saveDiemDanh() {
         file.close();
         countSaved++;
     }
-    
-    if (countSaved > 0) {
-        cout << "Đã lưu dữ liệu của " << countSaved << " lớp thành công!" << endl;
-    } else if (!danhSachLop.empty()) {
-        cout << "Không lưu được dữ liệu của lớp nào (có thể do lỗi mở file)." << endl;
-        return false;
-    }
-    return true;
+    return;
 }
 
 // Đọc file

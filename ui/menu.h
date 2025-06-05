@@ -20,6 +20,7 @@ private:
     void handleDiemDanh();
     void handleSuaDiemDanh();
     void handleXuatDiemDanh();
+    void handleXuatDiemDanhSV();
     void handleTimLichSu();
     void handleXemThongKe();
     void handleDocFile();

@@ -1,9 +1,8 @@
 #include "thongke.h"
 #include <iostream>
 #include <vector>
-#include "../modules/defaults.h" // Cần cho Lop, Sinhkhoa, DiemDanh
-#include <unordered_map> // Cần cho std::unordered_map
-// Không cần <string> ở đây nếu không dùng trực tiếp
+#include <unordered_map>
+
 using namespace std;
 // Định nghĩa phương thức tĩnh tinhThongKe
 ThongKe::ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {

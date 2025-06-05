@@ -3,18 +3,12 @@
 
 #include <string>
 #include <unordered_map>
-#include "../modules/defaults.h"
+#include "../modules/structure.h"
 // using namespace std;
 
 class ThongKe {
 public:
     // Cấu trúc thống kê lớp
-    struct TongketSinhvien{
-        string hoTen;
-        vector<pair<string, int>> trangThai;
-        int tongSoLuotCoMat = 0;
-    };
-
     struct ThongKeLop {
         int tongSinhkhoa;
         int tongBuoiDiemDanh;

@@ -31,4 +31,14 @@ struct Lop{
     
     Lop(int ma = 0, const string& ten = "") : maLop(ma), tenLop(ten) {}
 };
+
+// Cấu trúc tổng kết sinh viên
+struct TongketSinhvien{
+        string hoTen;
+        vector<pair<string, int>> trangThai;
+        int tongSoLuotCoMat = 0;
+
+        TongketSinhvien(const string& ten = "", const vector<pair<string, int>>& tt = {}, int sl = 0)
+        : hoTen(ten), trangThai(tt), tongSoLuotCoMat(sl) {}
+};
 #endif

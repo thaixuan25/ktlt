@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
-#include "../modules/defaults.h"
-#include "../middlewares/datevalidator.h"
-#include "../controllers/filemanager.h"
+#include "../modules/structure.h"
+#include "../utils/datevalidator.h"
+#include "../utils/filemanager.h"
 #include "thongke.h"
 
 class QuanLyLop{
@@ -23,9 +23,10 @@ public:
     bool diemDanh(const std::string& ngay, int maLop);
     bool suaDiemDanh(const std::string& ngay, int maLop, int maSV, int trangThai);
     void xuatDiemDanh(const std::string& ngay, int maLop);
+    void xuatDiemDanhSV(int maLop, int maSV);
     void xemLichSu(int maLop);
     void xemThongKe(int maLop);
-    bool saveDiemDanh();
+    void saveDiemDanh();
     bool docFile(int maLop);
     bool lopTonTai(int maLop) const;
     int getSoLuongSinhkhoa(int maLop) const;
