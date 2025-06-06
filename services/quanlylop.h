@@ -18,7 +18,7 @@ private:
 
 public:
     bool themLop(int maLop, const std::string& tenLop);
-    bool themSinhkhoa(int maLop, const Sinhkhoa& sv);
+    bool themSinhvien(int maLop, const Sinhvien& sv);
     bool themDiemDanh(const std::string& ngay, int maLop, int maSV, int trangThai);
     bool diemDanh(const std::string& ngay, int maLop);
     bool suaDiemDanh(const std::string& ngay, int maLop, int maSV, int trangThai);
@@ -29,7 +29,7 @@ public:
     void saveDiemDanh();
     bool docFile(int maLop);
     bool lopTonTai(int maLop) const;
-    int getSoLuongSinhkhoa(int maLop) const;
+    int getSoLuongSinhvien(int maLop) const;
     std::vector<int> getDanhSachMaLop() const;
 };
 

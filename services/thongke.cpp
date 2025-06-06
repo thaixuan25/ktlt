@@ -1,7 +1,6 @@
 #include "thongke.h"
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 
 using namespace std;
 // Định nghĩa phương thức tĩnh tinhThongKe

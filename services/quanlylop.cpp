@@ -1,7 +1,5 @@
 #include "quanlylop.h"
 #include <iostream>
-#include <fstream> 
-#include <sstream> 
 #include <iomanip> 
 
 using namespace std;
@@ -88,7 +86,7 @@ bool QuanLyLop::themLop(int maLop, const string& tenLop) {
 }
 
 // Thêm sinh viên
-bool QuanLyLop::themSinhkhoa(int maLop, const Sinhkhoa& sv) {
+bool QuanLyLop::themSinhvien(int maLop, const Sinhvien& sv) {
     auto lopIt = danhSachLop.find(maLop);
     if(lopIt == danhSachLop.end()) {
         cout << "Lớp " << maLop << " không tồn tại trong bộ nhớ! Hãy thêm lớp hoặc đọc từ file trước." << endl;
@@ -356,7 +354,7 @@ void QuanLyLop::xemThongKe(int maLop) {
 // Lưu điểm danh
 void QuanLyLop::saveDiemDanh() {
     if(!FileManager::createDirectory()) {
-        cout << "Lỗi: Không thể tạo hoặc truy cập thư mục lưu trữ '" << endl;
+        cout << "Lỗi: Không thể tạo hoặc truy cập thư mục lưu trữ." << endl;
         return;
     }
     
@@ -367,154 +365,30 @@ void QuanLyLop::saveDiemDanh() {
 
     int countSaved = 0;
     for(const auto& lopPair : danhSachLop) {
-        const auto& lop = lopPair.second;
-        string filePath = FileManager::getFilePath(lop.maLop);
-        ofstream file(filePath);
-        
-        if(!file.is_open()) {
-            cout << "Lỗi: Không thể mở file để lưu cho lớp " << lop.maLop << " tại đường dẫn: " << filePath << endl;
-            continue;
+        if(FileManager::saveLop(lopPair.second)) {
+            countSaved++;
         }
-        
-        file << lop.maLop << " - " << lop.tenLop << "\n";
-        
-        for(const auto& svPair : lop.danhSachSV) {
-            const auto& sv = svPair.second;
-            file << sv.maSV << "|" << sv.hoTen << "|" << sv.khoa << "\n";
-        }
-        // Dấu phân cách giữa danh sách SV và các ngày điểm danh
-        file << "---DIEMDANH---\n"; 
-
-        for(const auto& ddNgay : lop.danhSachDiemDanh) {
-            file << ddNgay.ngay << "\n";
-            for(const auto& trangThaiPair : ddNgay.trangThai) {
-                file << trangThaiPair.first << "-" << trangThaiPair.second << "\n";
-            }
-            file << "--ENDNGAY--\n"; // Dấu kết thúc cho một ngày
-        }
-        file.close();
-        countSaved++;
     }
-    return;
+    
+    cout << "Đã lưu thành công dữ liệu cho " << countSaved << "/" << danhSachLop.size() << " lớp." << endl;
 }
 
 // Đọc file
 bool QuanLyLop::docFile(int maLopDoc) {
-    string filePath = FileManager::getFilePath(maLopDoc);
     if(!FileManager::fileExists(maLopDoc)) {
-        cout << "File không tồn tại cho lớp " << maLopDoc << " tại: " << filePath << endl;
+        cout << "File không tồn tại cho lớp " << maLopDoc << "." << endl;
         return false;
+    }
+
+    Lop lopDoc;
+    if(FileManager::readLop(maLopDoc, lopDoc)) {
+        danhSachLop[maLopDoc] = lopDoc;
+        cout << "Đọc dữ liệu cho lớp " << maLopDoc << " - '" << lopDoc.tenLop << "' thành công." << endl;
+        return true;
     }
     
-    ifstream file(filePath);
-    if(!file.is_open()) {
-        cout << "Lỗi: Không thể mở file cho lớp " << maLopDoc << " tại: " << filePath << endl;
-        return false;
-    }
-    // Xóa dữ liệu lớp cũ (nếu có)
-    danhSachLop.erase(maLopDoc); 
-    string line;
-    if(!getline(file, line)) {
-        cout << "Lỗi: File " << filePath << " rỗng hoặc không thể đọc dòng thông tin lớp." << endl;
-        file.close();
-        return false;
-    }
-    
-    size_t posDash = line.find(" - ");
-    if(posDash == string::npos) {
-        cout << "Lỗi: Format dòng thông tin lớp không đúng trong file " << filePath << ". Mong đợi: 'MaLop - TenLop'." << endl;
-        file.close();
-        return false;
-    }
-    
-    string maLopStr = line.substr(0, posDash);
-    string tenLop;
-    try {
-        tenLop = line.substr(posDash + 3);
-    } catch (const exception& e) {
-        cout << "Lỗi khi xử lý thông tin lớp từ dòng: '" << line << "'. Chi tiết: " << e.what() << endl;
-        file.close();
-        return false;
-    }
-
-    Lop lopMoi(maLopDoc, tenLop);
-
-    while(getline(file, line) && line != "---DIEMDANH---") {
-        if(line.empty()) continue;
-        
-        istringstream iss(line);
-        string svMaStr, svHoTen, svKhoa;
-        
-        if(getline(iss, svMaStr, '|') && 
-           getline(iss, svHoTen, '|') && 
-           getline(iss, svKhoa)) {
-            try {
-                int svMa = stoi(svMaStr);
-                lopMoi.danhSachSV[svMa] = Sinhkhoa(svMa, svHoTen, svKhoa);
-            } catch(const exception& e) {
-                cout << "Cảnh báo: Bỏ qua dòng sinh viên không hợp lệ: '" << line << "'. Lỗi: " << e.what() << endl;
-            }
-        } else {
-            cout << "Cảnh báo: Bỏ qua dòng sinh viên có định dạng không đúng: '" << line << "'" << endl;
-        }
-    }
-
-    string ngayCurrent;
-    DiemDanh diemDanhNgayObj;
-
-    while(getline(file, line)) {
-        if(line.empty()) continue;
-
-        if(line == "--ENDNGAY--") { // Kết thúc một ngày
-            if(!ngayCurrent.empty() && !diemDanhNgayObj.trangThai.empty()) {
-                lopMoi.danhSachDiemDanh.push_back(diemDanhNgayObj);
-            }
-            ngayCurrent = "";
-            continue;
-        }
-
-        if(ngayCurrent.empty()) { 
-            if(DateValidator::isValidDate(line)){
-                ngayCurrent = line;
-                diemDanhNgayObj = DiemDanh(ngayCurrent);
-            } else {
-                 cout << "Cảnh báo: Bỏ qua dòng ngày không hợp lệ: '" << line << "'" << endl;
-                 while(getline(file, line) && line != "--ENDNGAY--") {} 
-                 if (file.eof() && line != "--ENDNGAY--") break;
-                 ngayCurrent = "";
-            }
-            continue;
-        }
-        
-        if (!ngayCurrent.empty()) {
-            size_t dashPosDD = line.find('-');
-            if(dashPosDD != string::npos) {
-                try {
-                    int maSvDd = stoi(line.substr(0, dashPosDD));
-                    int trangThaiDd = stoi(line.substr(dashPosDD + 1));
-                    
-                    if(lopMoi.danhSachSV.count(maSvDd) && (trangThaiDd == 0 || trangThaiDd == 1)) {
-                         diemDanhNgayObj.trangThai[maSvDd] = trangThaiDd;
-                    } else if (!lopMoi.danhSachSV.count(maSvDd)){
-                        cout << "Cảnh báo: Bỏ qua điểm danh cho SV " << maSvDd << " (không có trong lớp) ngày " << ngayCurrent << endl;
-                    } else {
-                        cout << "Cảnh báo: Bỏ qua điểm danh cho SV " << maSvDd << " (trạng thái " << trangThaiDd << " không hợp lệ) ngày " << ngayCurrent << endl;
-                    }
-                } catch(const exception& e) {
-                    cout << "Cảnh báo: Bỏ qua dòng điểm danh không hợp lệ: '" << line << "'. Lỗi: " << e.what() << endl;
-                }
-            } else {
-                 cout << "Cảnh báo: Bỏ qua dòng điểm danh có định dạng sai: '" << line << "' cho ngày " << ngayCurrent << endl;
-            }
-        }
-    }
-    if(!ngayCurrent.empty() && !diemDanhNgayObj.trangThai.empty()) {
-        lopMoi.danhSachDiemDanh.push_back(diemDanhNgayObj);
-    }
-
-    danhSachLop[maLopDoc] = lopMoi;
-    file.close();
-    return true;
+    cout << "Lỗi: Không thể đọc hoặc xử lý file cho lớp " << maLopDoc << "." << endl;
+    return false;
 }
 
 // Kiểm tra xem lớp có tồn tại không
@@ -523,7 +397,7 @@ bool QuanLyLop::lopTonTai(int maLop) const {
 }
 
 // Lấy số lượng sinh viên
-int QuanLyLop::getSoLuongSinhkhoa(int maLop) const {
+int QuanLyLop::getSoLuongSinhvien(int maLop) const {
     auto it = danhSachLop.find(maLop);
     return (it != danhSachLop.end()) ? it->second.danhSachSV.size() : 0;
 }

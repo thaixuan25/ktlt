@@ -1,9 +1,7 @@
 #include "menu.h"
-#include "../utils/datevalidator.h" // Cần cho DateValidator::getCurrentDate()
-#include "../modules/structure.h"      // Cần cho Sinhkhoa
-#include <iostream>                     // Cần cho cout, cin, endl
-#include <string>                       // Cần cho string, getline
-#include <limits>                       // Cần cho numeric_limits
+#include "../utils/datevalidator.h"
+#include "../modules/structure.h"
+#include <iostream>
 
 using namespace std;
 // -- Định nghĩa các phương thức của Menu --
@@ -11,17 +9,17 @@ using namespace std;
 int Menu::readInt(const string& prompt) {
     int value;
     cout << prompt;
-    while(!(cin >> value) || cin.peek() != '\n') { // Thêm kiểm tra ký tự thừa
+    while(!(cin >> value) || cin.peek() != '\n') {
         cout << "Vui lòng nhập một số nguyên hợp lệ: ";
         cin.clear();
-        cin.ignore();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
     return value;
 }
 
 void Menu::pauseScreen() {
     cout << "\nNhấn Enter để tiếp tục...";
-    cin.ignore(); // Đảm bảo bộ đệm sạch
+    cin.ignore();
     cin.get();
 }
 
@@ -51,7 +49,7 @@ void Menu::menu(){
         
         switch(choice){
             case 1: handleThemLop(); break;
-            case 2: handleThemSinhkhoa(); break;
+            case 2: handleThemSinhvien(); break;
             case 3: handleDiemDanh(); break;
             case 4: handleSuaDiemDanh(); break;
             case 5: handleXuatDiemDanh(); break;
@@ -77,7 +75,7 @@ void Menu::handleThemLop() {
     
     cout << "Nhập tên lớp: ";
     string tenLop;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa bộ đệm trước getline
+    cin.ignore();
     getline(cin, tenLop);
     
     if(tenLop.empty()){
@@ -90,11 +88,10 @@ void Menu::handleThemLop() {
     }
 }
 
-void Menu::handleThemSinhkhoa() {
+void Menu::handleThemSinhvien() {
     cout << "\n --- THÊM SINH VIÊN VÀO LỚP ---" << endl;
     int maLop = readInt("Nhập mã lớp cần thêm sinh viên: ");
     
-    // Kiểm tra lớp có trong bộ nhớ không (QuanLyLop::lopTonTai giờ kiểm tra bộ nhớ)
     if(!ql.lopTonTai(maLop)) {
         cout << "Lớp với mã " << maLop << " không tồn tại trong bộ nhớ. Vui lòng thêm lớp hoặc đọc từ file trước." << endl;
         return;
@@ -110,7 +107,7 @@ void Menu::handleThemSinhkhoa() {
     for(int i = 0; i < n; i++) {
         cout << "\n--- Nhập thông tin cho sinh viên thứ " << (i+1) << " ---" << endl;
         int maSV = readInt("Mã sinh viên (số nguyên): ");
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa bộ đệm
+        cin.ignore(); // Xóa bộ đệm
         
         cout << "Họ và tên: ";
         string hoTen;
@@ -122,10 +119,10 @@ void Menu::handleThemSinhkhoa() {
         
         if(hoTen.empty() || khoa.empty()) {
             cout << "Thông tin họ tên hoặc khoa không được để trống! Sinh viên này sẽ được bỏ qua." << endl;
-            continue; // Bỏ qua sinh viên này, tiếp tục với sinh viên tiếp theo
+            continue;
         }
         
-        if(ql.themSinhkhoa(maLop, Sinhkhoa(maSV, hoTen, khoa))) {
+        if(ql.themSinhvien(maLop, Sinhvien(maSV, hoTen, khoa))) {
             addedCount++;
         }
     }
@@ -226,7 +223,5 @@ void Menu::handleXemThongKe() {
 void Menu::handleDocFile() {
     cout << "\n --- ĐỌC DỮ LIỆU LỚP TỪ FILE ---" << endl;
     int maLop = readInt("Nhập mã lớp cần đọc dữ liệu từ file: ");
-    if (ql.docFile(maLop)) {
-        cout << "Đọc dữ liệu lớp " << maLop << " từ file thành công." << endl;
-    }
+    ql.docFile(maLop);
 } 

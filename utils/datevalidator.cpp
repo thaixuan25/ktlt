@@ -1,11 +1,10 @@
 #include "datevalidator.h"
-#include <string> // Cho string, stoi
-#include <vector> // Cho vector
-#include <chrono> // Cho chrono
-#include <sstream> // Cho stringstream
-#include <iomanip> // Cho setfill, setw
-#include <cctype>  // Cho isdigit
-#include <ctime>   // Cho localtime
+#include <vector>
+#include <chrono>
+#include <sstream>
+#include <iomanip>
+#include <cctype>
+#include <ctime>
 
 using namespace std;
 // Định nghĩa các phương thức tĩnh của DateValidator
