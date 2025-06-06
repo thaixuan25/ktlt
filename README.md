@@ -1,11 +1,6 @@
 # Quản Lý Điểm Danh Sinh Viên
 
-![Language](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)
-![Standard](https://img.shields.io/badge/Standard-C%2B%2B17-blue.svg)
-![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-
-Đây là đồ án môn học Kỹ thuật Lập trình, xây dựng một ứng dụng console (CLI) bằng ngôn ngữ C++ để giải quyết bài toán quản lý chuyên cần của sinh viên trong các lớp học. Ứng dụng cho phép quản lý lớp, sinh viên, thực hiện điểm danh, xem lịch sử và thống kê.
+Đây là báo cáo môn học Kỹ thuật Lập trình, xây dựng một ứng dụng console (CLI) bằng ngôn ngữ C++ để giải quyết bài toán quản lý chuyên cần của sinh viên trong các lớp học. Ứng dụng cho phép quản lý lớp, sinh viên, thực hiện điểm danh, xem lịch sử và thống kê.
 
 ## ✨ Tính năng chính
 
@@ -26,38 +21,34 @@ Dự án được tổ chức theo kiến trúc module hóa, giúp mã nguồn t
 
 ```
 /
-├── controllers/      # Lớp điều khiển, quản lý các tác vụ phụ trợ như file
+├── utils/      # Lớp trung gian, cung cấp các tiện ích như xác thực
 │   ├── filemanager.h
 │   └── filemanager.cpp
-├── middlewares/      # Lớp trung gian, cung cấp các tiện ích như xác thực
 │   ├── datevalidator.h
 │   └── datevalidator.cpp
-├── modules/          # Định nghĩa các cấu trúc dữ liệu cốt lõi (Entities)
+├── modules/          # Định nghĩa các cấu trúc dữ liệu cốt lõi
 │   └── defaults.h
-├── services/         # Chứa logic nghiệp vụ (Business Logic) chính của ứng dụng
+├── services/         # Chứa logic nghiệp vụ chính của ứng dụng
 │   ├── quanlylop.h
 │   ├── quanlylop.cpp
 │   ├── thongke.h
 │   └── thongke.cpp
-├── ui/               # Giao diện người dùng (User Interface) trên console
+├── ui/               # Giao diện người dùng trên console
 │   ├── menu.h
 │   └── menu.cpp
 ├── main.cpp          # Điểm khởi đầu của chương trình
-├── Makefile          # Tệp dùng để biên dịch và quản lý dự án
-└── README.md
+└── README.md         # Hướng dẫn sử dụng
 ```
 
 ## 🛠️ Công nghệ sử dụng
 
 - **Ngôn ngữ:** C++ (tiêu chuẩn C++17)
-- **Trình biên dịch:** MinGW g++
-- **Hệ thống Build:** GNU Make
 
 ## 🚀 Bắt đầu
 
 ### Yêu cầu tiên quyết
 
-- Bạn cần cài đặt **MinGW** (cung cấp trình biên dịch `g++` và công cụ `make`) và đảm bảo đã thêm nó vào biến môi trường `PATH` của hệ thống.
+- Bạn cần cài đặt **MinGW** (cung cấp trình biên dịch `g++`) và đảm bảo đã thêm nó vào biến môi trường `PATH` của hệ thống.
 
 ### Cài đặt và Chạy
 
@@ -72,11 +63,10 @@ Dự án được tổ chức theo kiến trúc module hóa, giúp mã nguồn t
     ```
 
 3.  **Biên dịch dự án:**
-    Mở terminal và chạy lệnh `make`. Lệnh này sẽ đọc `Makefile` và biên dịch tất cả các tệp nguồn cần thiết để tạo ra tệp thực thi `main.exe`.
+    Mở terminal và chạy lệnh `g++ -o main.exe main.cpp -I./utils -I./modules -I./services -I./ui`.
     ```sh
-    make
+    g++ -o main.exe main.cpp -I./utils -I./modules -I./services -I./ui
     ```
-    Hoặc có thể dùng lệnh `make all`.
 
 4.  **Chạy ứng dụng:**
     Sau khi biên dịch thành công, bạn có thể chạy ứng dụng bằng một trong hai cách sau:
@@ -84,15 +74,11 @@ Dự án được tổ chức theo kiến trúc module hóa, giúp mã nguồn t
       ```sh
       ./main.exe
       ```
-    - Hoặc sử dụng target `run` trong Makefile (lệnh này sẽ tự động biên dịch nếu cần và sau đó chạy):
-      ```sh
-      make run
-      ```
 
 5.  **Dọn dẹp:**
     Để xóa các tệp đã được biên dịch (`main.exe`), sử dụng lệnh:
     ```sh
-    make clean
+    rm main.exe
     ```
 
 ## 📈 Hướng phát triển trong tương lai
@@ -103,10 +89,6 @@ Dự án được tổ chức theo kiến trúc module hóa, giúp mã nguồn t
 - [ ] Viết Unit Test cho các module nghiệp vụ để đảm bảo tính đúng đắn.
 - [ ] Thêm hệ thống xác thực người dùng (đăng nhập, phân quyền).
 
-## 📄 Giấy phép
+_Báo cáo được thực hiện trong khuôn khổ môn học Kỹ thuật Lập trình._ 
 
-Dự án này được cấp phép theo Giấy phép MIT.
-
----
-
-_Đồ án được thực hiện trong khuôn khổ môn học Kỹ thuật Lập trình._ 
+_Nhóm 222_
