@@ -2,8 +2,10 @@
 #define MENU_H
 
 #include "../services/quanlylop.h"
-#include <string>
+#include "../utils/datevalidator.h"
+#include "../modules/structure.h"
 
+// Lớp menu
 class Menu{
 private:
     QuanLyLop ql;

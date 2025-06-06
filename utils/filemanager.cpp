@@ -20,15 +20,17 @@ bool FileManager::createDirectory() {
     }
 }
 
+// Hàm lấy đường dẫn file lớp
 string FileManager::getFilePath(int maLop) {
     return DATA_DIR + to_string(maLop) + ".txt";
 }
 
+// Hàm kiểm tra file có tồn tại không
 bool FileManager::fileExists(int maLop) {
     return exists(getFilePath(maLop));
 }
 
-// Logic lưu file được chuyển từ QuanLyLop::saveDiemDanh
+// Hàm lưu file lớp
 bool FileManager::saveLop(const Lop& lop) {
     string filePath = getFilePath(lop.maLop);
     ofstream file(filePath);
@@ -63,13 +65,12 @@ bool FileManager::saveLop(const Lop& lop) {
     return true;
 }
 
-// Logic đọc file được chuyển từ QuanLyLop::docFile
+// Hàm đọc file lớp
 bool FileManager::readLop(int maLop, Lop& outLop) {
     string filePath = getFilePath(maLop);
     ifstream file(filePath);
     
     if(!file.is_open()) {
-        // Không cần thông báo lỗi ở đây vì hàm gọi sẽ xử lý
         return false;
     }
 
@@ -88,7 +89,7 @@ bool FileManager::readLop(int maLop, Lop& outLop) {
     }
     
     string tenLop = line.substr(posDash + 3);
-    outLop = Lop(maLop, tenLop); // Khởi tạo đối tượng Lop được truyền vào
+    outLop = Lop(maLop, tenLop);
 
     // Đọc danh sách sinh viên
     while(getline(file, line) && line != "---DIEMDANH---") {
@@ -112,6 +113,7 @@ bool FileManager::readLop(int maLop, Lop& outLop) {
     string ngayCurrent;
     DiemDanh diemDanhNgayObj;
 
+    // Đọc lịch sử điểm danh
     while(getline(file, line)) {
         if(line.empty()) continue;
 

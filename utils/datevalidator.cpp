@@ -24,14 +24,14 @@ bool DateValidator::isValidDate(const string& date) {
         month = stoi(date.substr(3, 2));
         year = stoi(date.substr(6, 4));
     } catch (const out_of_range& oor) {
-        return false; // Lỗi nếu substr ra ngoài phạm vi, hoặc stoi không đổi được
+        return false;
     } catch (const invalid_argument& ia) {
-        return false; // Lỗi nếu stoi không đổi được
+        return false;
     }
 
     if(month < 1 || month > 12) return false;
     if(day < 1 || day > 31) return false;
-    if(year < 1900 || year > 2100) return false; // Giới hạn năm hợp lý
+    if(year < 1900 || year > 2100) return false; // Giới hạn năm
     
     vector<int> daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     
@@ -42,6 +42,7 @@ bool DateValidator::isValidDate(const string& date) {
     return day <= daysInMonth[month - 1];
 }
 
+// Hàm lấy ngày hiện tại
 string DateValidator::getCurrentDate() {
     auto now = chrono::system_clock::now();
     time_t timeNowT = chrono::system_clock::to_time_t(now);

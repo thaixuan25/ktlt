@@ -1,14 +1,12 @@
 #ifndef QUANLYLOP_H
 #define QUANLYLOP_H
 
-#include <unordered_map>
-#include <string>
-#include <vector>
 #include "../modules/structure.h"
 #include "../utils/datevalidator.h"
 #include "../utils/filemanager.h"
 #include "thongke.h"
 
+// Lớp quản lý lớp
 class QuanLyLop{
 private:
     std::unordered_map<int, Lop> danhSachLop; // Key: maLop, Value: Lop
@@ -30,7 +28,7 @@ public:
     bool docFile(int maLop);
     bool lopTonTai(int maLop) const;
     int getSoLuongSinhvien(int maLop) const;
-    std::vector<int> getDanhSachMaLop() const;
+    vector<int> getDanhSachMaLop() const;
 };
 
 #endif

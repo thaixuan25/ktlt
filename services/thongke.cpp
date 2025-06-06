@@ -1,12 +1,10 @@
 #include "thongke.h"
-#include <iostream>
-#include <vector>
+// ---Định nghĩa phương thức tĩnh tinhThongKe---
 
-using namespace std;
-// Định nghĩa phương thức tĩnh tinhThongKe
-ThongKe::ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {
+// Hàm tính thống kê
+ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {
     ThongKeLop tk;
-    tk.tongSinhkhoa = lop.danhSachSV.size();
+    tk.tongSinhvien = lop.danhSachSV.size();
     tk.tongBuoiDiemDanh = lop.danhSachDiemDanh.size();
     
     // Khởi tạo soLanVang cho tất cả sinh viên
@@ -14,12 +12,11 @@ ThongKe::ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {
         tk.soLanVang[svPair.first] = 0;
     }
 
-    if(tk.tongBuoiDiemDanh == 0 || tk.tongSinhkhoa == 0) {
+    if(tk.tongBuoiDiemDanh == 0 || tk.tongSinhvien == 0) {
         tk.tiLeDiemDanhTrungBinh = 0.0;
-        // Vẫn trả về tk với soLanVang đã khởi tạo (toàn 0)
         return tk;
     }    
-    long long tongSoLuotCoMat = 0; // Sử dụng long long để tránh tràn nếu số lượng lớn
+    int tongSoLuotCoMat = 0;
     
     // Khởi tạo dữ liệu cho tất cả sinh viên
     for(const auto& svPair : lop.danhSachSV) {
@@ -51,7 +48,7 @@ ThongKe::ThongKeLop ThongKe::tinhThongKe(const Lop& lop) {
     
     // Tính tỷ lệ điểm danh trung bình
     // Đảm bảo không chia cho 0 nếu tongBuoiDiemDanh hoặc tongSinhkhoa là 0 (đã check ở trên)
-    tk.tiLeDiemDanhTrungBinh = static_cast<double>(tongSoLuotCoMat) / (static_cast<double>(tk.tongSinhkhoa) * tk.tongBuoiDiemDanh) * 100.0;
+    tk.tiLeDiemDanhTrungBinh = static_cast<double>(tongSoLuotCoMat) / (static_cast<double>(tk.tongSinhvien) * tk.tongBuoiDiemDanh) * 100.0;
     
     return tk;
 } 

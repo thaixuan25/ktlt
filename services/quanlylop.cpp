@@ -1,15 +1,13 @@
 #include "quanlylop.h"
 #include <iostream>
-#include <iomanip> 
 
 using namespace std;
-
 
 // --- Định nghĩa các phương thức của QuanLyLop ---
 
 // Điểm danh mới
 bool QuanLyLop::diemDanhMoi(const string& ngay, Lop& lop) {
-    DiemDanh diemDanhMoiObj(ngay); // Đổi tên để tránh trùng với tham số `ngay` của hàm ngoài
+    DiemDanh diemDanhMoiObj(ngay);
     cout << "\nĐIỂM DANH LỚP " << lop.tenLop << " - NGÀY " << ngay << endl;
     cout << string(50, '=') << endl;
     
@@ -24,7 +22,7 @@ bool QuanLyLop::diemDanhMoi(const string& ngay, Lop& lop) {
                 cout << "Vui lòng nhập 0 hoặc 1!" << endl;
                 cin.clear();
                 cin.ignore();
-                trangThai = -1; // Đặt giá trị không hợp lệ để lặp lại
+                trangThai = -1;// Giá trị không hợp lệ
             }
         } while(trangThai != 0 && trangThai != 1);
         cin.ignore();
@@ -55,7 +53,7 @@ bool QuanLyLop::diemDanhLai(DiemDanh& diemDanh, const Lop& lop) {
                 cout << "Vui lòng nhập 0 hoặc 1!" << endl;
                 cin.clear();
                 cin.ignore();
-                trangThai = -1; // Đặt giá trị không hợp lệ để lặp lại
+                trangThai = -1; // Giá trị không hợp lệ
             }
         } while(trangThai != 0 && trangThai != 1);
         cin.ignore();
@@ -120,7 +118,7 @@ bool QuanLyLop::diemDanh(const string& ngay, int maLop) {
         return false;
     }
     
-    // Kiểm tra điểm danh đã tồn tại cho ngày này
+    // Kiểm tra tồn tại điểm danh cho ngày này
     for(auto& ddNgay : lopIt->second.danhSachDiemDanh) {
         if(ddNgay.ngay == ngay) {
             char choice;
@@ -208,7 +206,7 @@ void QuanLyLop::xuatDiemDanh(const string& ngay, int maLop) {
                 for(const auto& svPair : lopIt->second.danhSachSV) {
                     const auto& sv = svPair.second;
                     auto itTrangThai = ddNgay.trangThai.find(sv.maSV);
-                    string trangThaiOutput = "Vắng (chưa điểm danh)"; // Mặc định
+                    string trangThaiOutput = "Vắng"; // Mặc định
 
                     if(itTrangThai != ddNgay.trangThai.end()) {
                         trangThaiOutput = (itTrangThai->second == 1) ? "Co mat" : "Vang";
@@ -313,16 +311,16 @@ void QuanLyLop::xemThongKe(int maLop) {
         return;
     }
     
-    ThongKe::ThongKeLop tk = ThongKe::tinhThongKe(lopIt->second);
+    ThongKeLop tk = ThongKe::tinhThongKe(lopIt->second);
     
     cout << "\nTHỐNG KÊ LỚP " << lopIt->second.tenLop << " (Mã: " << maLop << ")" << endl;
     cout << string(60, '=') << endl;
-    cout << "Tổng số sinh viên: " << tk.tongSinhkhoa << endl;
+    cout << "Tổng số sinh viên: " << tk.tongSinhvien << endl;
     cout << "Tổng số buổi điểm danh: " << tk.tongBuoiDiemDanh << endl;
     cout << "Tỷ lệ điểm danh trung bình toàn lớp: " << fixed << setprecision(2) 
               << tk.tiLeDiemDanhTrungBinh << "%" << endl;
     
-    if (tk.tongSinhkhoa > 0 && tk.tongBuoiDiemDanh > 0) {
+    if (tk.tongSinhvien > 0 && tk.tongBuoiDiemDanh > 0) {
         cout << string(30 + 12 * tk.tongBuoiDiemDanh + 10, '=') << endl;
         
         cout << left << setw(25) << "Ho va ten" << left << setw(12) << "Ma SV";
@@ -344,7 +342,7 @@ void QuanLyLop::xemThongKe(int maLop) {
         
         cout << string(30 + 12 * tk.tongBuoiDiemDanh + 10, '=') << endl;
     }
-    else if (tk.tongSinhkhoa == 0) {
+    else if (tk.tongSinhvien == 0) {
         cout << "Lớp chưa có sinh viên." << endl;
     } else {
         cout << "Lớp chưa có buổi điểm danh nào." << endl;
@@ -369,8 +367,6 @@ void QuanLyLop::saveDiemDanh() {
             countSaved++;
         }
     }
-    
-    cout << "Đã lưu thành công dữ liệu cho " << countSaved << "/" << danhSachLop.size() << " lớp." << endl;
 }
 
 // Đọc file

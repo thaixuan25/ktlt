@@ -1,11 +1,8 @@
 #include "menu.h"
-#include "../utils/datevalidator.h"
-#include "../modules/structure.h"
 #include <iostream>
+// --- Định nghĩa các phương thức của Menu ---
 
-using namespace std;
-// -- Định nghĩa các phương thức của Menu --
-
+// Hàm đọc số nguyên từ người dùng
 int Menu::readInt(const string& prompt) {
     int value;
     cout << prompt;
@@ -17,12 +14,14 @@ int Menu::readInt(const string& prompt) {
     return value;
 }
 
+// Hàm để tạm dừng màn hình
 void Menu::pauseScreen() {
     cout << "\nNhấn Enter để tiếp tục...";
     cin.ignore();
     cin.get();
 }
 
+// Hàm hiển thị menu chính
 void Menu::menu(){
     cout << "🎓 === HỆ THỐNG QUẢN LÝ ĐIỂM DANH === 🎓" << endl;
     cout << "Ngày hiện tại: " << DateValidator::getCurrentDate() << endl;
@@ -69,6 +68,7 @@ void Menu::menu(){
     }
 }
 
+// Hàm hiển thị khung hình thêm lớp học mới
 void Menu::handleThemLop() {
     cout << "\n--- THÊM LỚP HỌC MỚI ---" << endl;
     int maLop = readInt("Nhập mã lớp (số nguyên): ");
@@ -88,6 +88,7 @@ void Menu::handleThemLop() {
     }
 }
 
+// Hàm hiển thị khung hình thêm sinh viên vào lớp
 void Menu::handleThemSinhvien() {
     cout << "\n --- THÊM SINH VIÊN VÀO LỚP ---" << endl;
     int maLop = readInt("Nhập mã lớp cần thêm sinh viên: ");
@@ -131,6 +132,7 @@ void Menu::handleThemSinhvien() {
     if(addedCount > 0) ql.saveDiemDanh();
 }
 
+// Hàm hiển thị khung hình thực hiện điểm danh
 void Menu::handleDiemDanh() {
     cout << "\n --- THỰC HIỆN ĐIỂM DANH ---" << endl;
     string ngayHienTai = DateValidator::getCurrentDate();
@@ -158,6 +160,7 @@ void Menu::handleDiemDanh() {
     }
 }
 
+// Hàm hiển thị khung hình sửa điểm danh
 void Menu::handleSuaDiemDanh() {
     cout << "\n --- SỬA THÔNG TIN ĐIỂM DANH ---" << endl;
     cout << "Nhập ngày điểm danh cần sửa (dd/mm/yyyy): ";
@@ -184,6 +187,7 @@ void Menu::handleSuaDiemDanh() {
     }
 }
 
+// Hàm hiển thị khung hình xuất bảng điểm danh theo ngày
 void Menu::handleXuatDiemDanh() {
     cout << "\n --- XUẤT BẢNG ĐIỂM DANH THEO NGÀY ---" << endl;
     cout << "Nhập ngày cần xuất bảng điểm danh (dd/mm/yyyy): ";
@@ -200,6 +204,7 @@ void Menu::handleXuatDiemDanh() {
     ql.xuatDiemDanh(ngay, maLop);
 }
 
+// Hàm hiển thị khung hình xuất bảng điểm danh của sinh viên
 void Menu::handleXuatDiemDanhSV() {
     cout << "\n --- XUẤT BẢNG ĐIỂM DANH CỦA SINH VIÊN ---" << endl;
     int maSV = readInt("Nhập mã sinh viên: ");
@@ -207,6 +212,7 @@ void Menu::handleXuatDiemDanhSV() {
     ql.xuatDiemDanhSV(maLop, maSV);
 }
 
+// Hàm hiển thị khung hình xem lịch sử điểm danh của lớp
 void Menu::handleTimLichSu() {
     cout << "\n --- XEM LỊCH SỬ CÁC NGÀY ĐÃ ĐIỂM DANH ---" << endl;
     int maLop = readInt("Nhập mã lớp cần xem lịch sử: ");
@@ -214,12 +220,14 @@ void Menu::handleTimLichSu() {
     ql.xemLichSu(maLop);
 }
 
+// Hàm hiển thị khung hình xem thống kê điểm danh của lớp
 void Menu::handleXemThongKe() {
     cout << "\n --- XEM THỐNG KÊ ĐIỂM DANH CỦA LỚP ---" << endl;
     int maLop = readInt("Nhập mã lớp cần xem thống kê: ");
     ql.xemThongKe(maLop);
 }
 
+// Hàm hiển thị khung hình đọc dữ liệu lớp từ file
 void Menu::handleDocFile() {
     cout << "\n --- ĐỌC DỮ LIỆU LỚP TỪ FILE ---" << endl;
     int maLop = readInt("Nhập mã lớp cần đọc dữ liệu từ file: ");

@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 using namespace std;
+
 // Cấu trúc sinh viên
 struct Sinhvien{
     int maSV;
@@ -41,4 +42,14 @@ struct TongketSinhvien{
         TongketSinhvien(const string& ten = "", const vector<pair<string, int>>& tt = {}, int sl = 0)
         : hoTen(ten), trangThai(tt), tongSoLuotCoMat(sl) {}
 };
+
+// Cấu trúc thống kê lớp
+    struct ThongKeLop {
+        int tongSinhvien;
+        int tongBuoiDiemDanh;
+        double tiLeDiemDanhTrungBinh;
+        unordered_map<int, int> soLanVang;
+        unordered_map<int, TongketSinhvien> tongketSinhvien;
+    };
+
 #endif
