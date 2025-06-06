@@ -107,7 +107,7 @@ void Menu::handleThemSinhvien() {
     for(int i = 0; i < n; i++) {
         cout << "\n--- Nhập thông tin cho sinh viên thứ " << (i+1) << " ---" << endl;
         int maSV = readInt("Mã sinh viên (số nguyên): ");
-        cin.ignore(); // Xóa bộ đệm
+        cin.ignore();
         
         cout << "Họ và tên: ";
         string hoTen;
